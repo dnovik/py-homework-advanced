@@ -29,7 +29,7 @@ class OpenerFile():
         pass
 
 
-file = r'C:\Users\54292\Desktop\My folder\Python\Netology\2.5.manager_context\test.txt'
+file = r'test.txt'
 
 with OpenerFile(file) as f:
     print(f.read())
