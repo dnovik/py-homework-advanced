@@ -1,5 +1,5 @@
 
-file = r'D:\Python\Netology\py-homework-basic-files\2.4.files\recipes.txt'
+file = 'recipes.txt'
 
 
 cook_book = dict()
