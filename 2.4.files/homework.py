@@ -2,51 +2,57 @@
 file = 'recipes.txt'
 
 
-cook_book = dict()
+def add_to_recipes(file):
 
-def get_dish_qty(file):
+    file = file
 
-    dish_qty = 1
-    with open(file, encoding='utf-8') as f:
-        for line in f:
-            stripe = line.strip()
-            if stripe == '':
-                dish_qty += 1
+    def get_dish_qty(file):
 
-    return dish_qty
-
-
-def push_to_cook_book(file, dish_qty):
-
-    with open(file, encoding='utf-8') as f:
-        for i in range(0, dish_qty):
-            dish_name = f.readline().strip()
-            qty = int(f.readline())
-            cook_book[dish_name] = list()
-
-            for i in range(0, qty):
-                products = f.readline().strip().split(' | ')
-                ingridient_name = products[0]
-                quantity = products[1]
-                measure = products[2]
-
-                cook_book[dish_name].append({
-                    'ingridient_name' : ingridient_name,
-                    'quantity' : quantity,
-                    'measure' : measure
-                })
+        dish_qty = 1
+        with open(file) as f:
+            for line in f:
+                stripe = line.strip()
+                if stripe == '':
+                    dish_qty += 1
         
-            f.readline()
+        return dish_qty
+
+
+    def push_to_cook_book(file):
+
+        cook_book = dict()
+        dish_qty = get_dish_qty(file)
+
+        with open(file) as f:
+            for i in range(0, dish_qty):
+                dish_name = f.readline().strip()
+                qty = int(f.readline())
+                cook_book[dish_name] = list()
+
+                for i in range(0, qty):
+                    products = f.readline().strip().split(' | ')
+                    ingridient_name = products[0]
+                    quantity = products[1]
+                    measure = products[2]
+
+                    cook_book[dish_name].append({
+                        'ingridient_name' : ingridient_name,
+                        'quantity' : quantity,
+                        'measure' : measure
+                    })
+        
+                f.readline()
 
         return cook_book
 
-cook_book = push_to_cook_book(file, get_dish_qty(file))
+    return (push_to_cook_book(file))
+
+print(add_to_recipes(file))
 
 
-dish_list = ['Запеченный картофель', 'Омлет']
-persons = 2
+def get_shop_list_by_dishes(dish_list, persons, file_recipes):
 
-def get_shop_list_by_dishes(dishes, persons):
+    cook_book = add_to_recipes(file_recipes)
 
     shop_list = dict()
 
