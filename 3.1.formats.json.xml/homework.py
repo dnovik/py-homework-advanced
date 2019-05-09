@@ -2,8 +2,6 @@ import json
 from pprint import pprint
 import xml.etree.ElementTree as ET
 
-file_json = 'newsafr.json'
-file_xml = 'newsafr.xml'
 
 
 def get_text_from_json(file):
@@ -97,10 +95,16 @@ def get_text_from_file(file):
     else:
         print('Неизвестный формат')
 
+def get_top_words(file):
+    # возвращает список наиболее упоминаемых слов длинною более 6 символов
 
-text = get_text_from_file(file_json)
-word_stat = get_word_stat(text)
-rates = get_unique_rating(word_stat)
-top_words = find_top_words(rates, word_stat)
+    text = get_text_from_file(file)
+    word_stat = get_word_stat(text)
+    rates = get_unique_rating(word_stat)
+    top_words = find_top_words(rates, word_stat)
+    
+    print(top_words)
 
-print(top_words)
+
+get_top_words('newsafr.xml')
+get_top_words('newsafr.json')
