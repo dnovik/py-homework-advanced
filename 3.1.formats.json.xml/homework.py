@@ -2,11 +2,12 @@ import json
 from pprint import pprint
 import xml.etree.ElementTree as ET
 
-file = r'D:\Python\Netology\3.1.formats.json.xml\newsafr.json'
+file_json = 'newsafr.json'
+file_xml = 'newsafr.xml'
 
 
-def get_text(file):
-    # функция читает файл и возвращает текст новостей
+def get_text_from_json(file):
+    # функция читает файл json и возвращает список слов больше 6 символов
 
     words = list()
     with open(file, encoding='utf-8') as f:
@@ -22,6 +23,8 @@ def get_text(file):
         
     return words
 
+
+
 def get_word_stat(words):
     # функция возвращает словарь частотности слов на основе текста новостей
 
@@ -33,6 +36,7 @@ def get_word_stat(words):
             words_stat[word] += 1
 
     return words_stat
+
 
 
 def get_unique_rating(word_stat):
@@ -49,6 +53,8 @@ def get_unique_rating(word_stat):
 
     return rates[0:11]
 
+
+
 def find_top_words(rates, word_stat):
     # функция возвращает наиболее упоминаемые слова на основе списка уникальных значений частот
 
@@ -60,11 +66,41 @@ def find_top_words(rates, word_stat):
     return top_words
 
 
-text = get_text(file)
-word_stats = get_word_stat(text)
-rates = get_unique_rating(word_stats)
-top_words = find_top_words(rates, word_stats)
+
+def get_text_from_xml(file):
+    # функция читает файл xml и возвращает список слов больше 6 символов
+
+    words = []
+    tree = ET.parse(file_xml)
+    root = tree.getroot()
+
+    for article in range(6, len(root[0])):
+        text = root[0][article][2].text.split(' ')
+
+        for word in text:
+                if len(word) > 6:
+                    words.append(word)
+
+    return words
+
+
+
+def get_text_from_file(file):
+    # функция проверяет формат файла и вызывает соответствующую функцию чтения файла или возвращает ошибку
+
+    format = file.split('.')[-1]
+
+    if format == 'json':
+        return get_text_from_json(file)
+    elif format == 'xml':
+        return get_text_from_xml(file)
+    else:
+        print('Неизвестный формат')
+
+
+text = get_text_from_file(file_json)
+word_stat = get_word_stat(text)
+rates = get_unique_rating(word_stat)
+top_words = find_top_words(rates, word_stat)
 
 print(top_words)
-
-
