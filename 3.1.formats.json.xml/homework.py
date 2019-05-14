@@ -111,9 +111,4 @@ def get_top_words(file):
 
 get_top_words('newsafr.xml')
 get_top_words('newsafr.json')
-text = get_text_from_file(file_json)
-word_stat = get_word_stat(text)
-rates = get_unique_rating(word_stat)
-
-len(get_top_words('newsafr.xml'))
 
