@@ -3,12 +3,12 @@ import json
 from urllib.parse import urlencode
 
 
-credentials = r'D:\Python\Netology\3.3.classes.vk\credentials.json'
+credentials = r'C:\Users\54292\Desktop\My folder\Python\Netology\3.3.classes.vk\credentials.json'
 
 with open(credentials) as f:
     data = json.load(f)
     user_id = data['user_id']
-    access_token = data['access_token']
+    token = data['access_token']
     client_id = data['client_id']
 
 BASE_URL = 'https://api.vk.com/method'
@@ -16,34 +16,55 @@ BASE_URL = 'https://api.vk.com/method'
 
 class User:
     
-    def __init__(self, token):
+    def __init__(self, token, user_id, client_id):
 
+        self.user_id = user_id
         self.token = token
+        self.client_id = client_id
 
-    def get_params(self):
+    def authorization():
+        
+        URL = 'https://oauth.vk.com/authorize'
+
         params = {
-
+            'client_id' : client_id,
+            'display' : 'page',
+            'scope' : 'friends',
+            'response_type' : 'token',
+            'v' : '5.95'
         }
 
-    def get_user_id(self):
+        response = requests.get(URL, params)
+
+        return response.url
+
+        return response.url
+
+    def get_user_info(self):
         pass
 
-    def user(self):
+    def get_friends():
+
+        URL = 'https://api.vk.com/method/friends.get'
+
+
         params = {
-            'id' : id
+            'user_ids' : user_id,
+            'access_token' : token,
+            'v' : '5.95',
+            'order' : 'hints',
+            'fields' : 'nickname',
+            'name_case' : 'nom'
         }
-        link = requests.get('').url
 
-        return link
+        response = requests.get(URL, params)
 
+        return response.text
 
-params = {
-    'client_id' : '6984152',
-    'display' : 'page',
-    'scope' : 'friends ',
-    'response_type' : 'token',
-    'v' : '5.95'
-}
-token_url = 'https://oauth.vk.com/authorize'
+    
 
+<<<<<<< HEAD
 print('?'.join((token_url, urlencode(params))))
+=======
+User.get_friends()
+>>>>>>> f08f3b0fd3d43e192c5f608ba294cf25390e9ca6
