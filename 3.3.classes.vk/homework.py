@@ -8,7 +8,8 @@ credentials = r'D:\Python\Netology\3.3.classes.vk\credentials.json'
 with open(credentials) as f:
     data = json.load(f)
     user_id = data['user_id']
-    token = data['TOKEN']
+    access_token = data['access_token']
+    client_id = data['client_id']
 
 BASE_URL = 'https://api.vk.com/method'
 
@@ -45,4 +46,4 @@ params = {
 }
 token_url = 'https://oauth.vk.com/authorize'
 
-print('?'.join(token_url, urlencode(params)))
+print('?'.join((token_url, urlencode(params))))
