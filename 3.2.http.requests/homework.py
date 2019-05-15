@@ -16,7 +16,7 @@ def translator():
     to_lang_id = get_lang_id(to_lang)
 
     
-    translation = translate_text(source_file)
+    translation = translate_text(source_file, to_lang_id)
     write_translation(translation, destination_file)
 
 
@@ -46,7 +46,7 @@ def get_lang_id(language_name):
 
 
 
-def translate_text(source_file):
+def translate_text(source_file, to_lang):
     # функция принимает на вход файл с исходным текстом и передает его на API для перевода
     
     translate_url = 'https://translate.yandex.net/api/v1.5/tr.json/translate'
@@ -54,10 +54,11 @@ def translate_text(source_file):
     with open(source_file) as file:
         
         text = file.read()
+        
         params = {
             'key' : API_KEY,
             'text' : text,
-            'lang' : 'ru',
+            'lang' : to_lang,
             'format' : 'plain'
         }
     
@@ -71,5 +72,9 @@ def translate_text(source_file):
 def write_translation(translation, destination_file):
     # функция принимает на вход  перевод и путь для записи файла
     
-     with open(destination_file, 'w') as file:
+     with open(destination_file, 'w', encoding='utf-8') as file:
             file.write(translation)
+
+
+
+translator()
