@@ -18,6 +18,7 @@ def get_text_from_json(file):
 
             for word in text:
                 if len(word) > 6:
+                    word = word.lower()
                     words.append(word)
         
     return words
@@ -97,6 +98,8 @@ def get_text_from_file(file):
         return get_text_from_xml(file)
     else:
         print('Неизвестный формат')
+
+
 
 def get_top_words(file):
     # возвращает список наиболее упоминаемых слов длинною более 6 символов
