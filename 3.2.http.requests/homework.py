@@ -4,14 +4,10 @@ API_KEY = 'trnsl.1.1.20161025T233221Z.47834a66fd7895d0.a95fd4bfde5c1794fa4334539
 
 
 
-def translator(from_lang, to_lang, source_file, destination_file):
+def translator(source_file, destination_file, from_lang, to_lang='ru'):
     # главная функция, которая уточняет необходимые данные и возвращает перевод
-
-    from_lang_id = get_lang_id(from_lang)
-    to_lang_id = get_lang_id(to_lang)
-
     
-    translation = translate_text(source_file, from_lang_id, to_lang_id)
+    translation = translate_text(source_file, from_lang, to_lang)
     write_translation(translation, destination_file)
 
 
@@ -41,11 +37,12 @@ def get_lang_id(language_name):
 
 
 
-def translate_text(source_file, from_lang_id, to_lang):
+def translate_text(source_file, from_lang_id):
     # функция принимает на вход файл с исходным текстом и передает его на API для перевода
     
     translate_url = 'https://translate.yandex.net/api/v1.5/tr.json/translate'
-    
+    to_lang = 'ru'
+
     with open(source_file) as file:
         
         text = file.read()
