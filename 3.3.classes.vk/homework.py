@@ -1,17 +1,14 @@
 import requests
 import json
-from urllib.parse import urlencode
 
 
-credentials = r'C:\Users\54292\Desktop\My folder\Python\Netology\3.3.classes.vk\credentials.json'
+credentials = r'D:\Python\Netology\3.3.classes.vk\credentials.json'
 
 with open(credentials) as f:
     data = json.load(f)
     user_id = data['user_id']
     token = data['access_token']
     client_id = data['client_id']
-
-BASE_URL = 'https://api.vk.com/method'
 
 
 class User:
@@ -21,6 +18,8 @@ class User:
         self.user_id = user_id
         self.token = token
         self.client_id = client_id
+
+
 
     def authorization():
         
@@ -38,10 +37,40 @@ class User:
 
         return response.url
 
-        return response.url
 
-    def get_user_info(self):
-        pass
+    def get_info():
+
+        URL = 'https://api.vk.com/method/users.get'
+
+        params = {
+            'user_ids' : user_id,
+            'access_token' : token,
+            'fields' : ['id', 'first_name', 'last_name'],
+            'v' : '5.95'
+        }
+
+        response = requests.get(URL, params).json()
+
+        return response
+
+
+
+    def get_mutual_friends(user1, user2):
+
+        URL = 'https://api.vk.com/method/friends.getMutual'
+
+        params = {
+            'source_uid' : user1,
+            'target_uid' : user2,
+            'v' : '5.95'
+        }
+
+        response = requests.get(URL, params)
+
+        return response
+
+
+
 
     def get_friends():
 
@@ -61,10 +90,5 @@ class User:
 
         return response.text
 
-    
 
-<<<<<<< HEAD
-print('?'.join((token_url, urlencode(params))))
-=======
-User.get_friends()
->>>>>>> f08f3b0fd3d43e192c5f608ba294cf25390e9ca6
+User.get_info()

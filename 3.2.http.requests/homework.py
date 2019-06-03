@@ -41,6 +41,7 @@ def translate_text(source_file, from_lang_id):
     # функция принимает на вход файл с исходным текстом и передает его на API для перевода
     
     translate_url = 'https://translate.yandex.net/api/v1.5/tr.json/translate'
+    
     to_lang = 'ru'
 
     with open(source_file) as file:
@@ -67,6 +68,3 @@ def write_translation(translation, destination_file):
      with open(destination_file, 'w', encoding='utf-8') as file:
             file.write(translation)
 
-
-
-translator()
