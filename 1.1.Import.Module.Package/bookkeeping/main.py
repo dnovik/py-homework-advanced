@@ -1,11 +1,13 @@
-from application import salary
 
-
+from bookkeeping.application.salary import calculate_salary
+from bookkeeping.application.db.people import get_employees
 
 def main():
-    print('Добро пожаловать в программу "Бухгалтерия"!')
-    print(salary.calculate_salary())
+
+    if __name__ == "__main__":
+
+        calculate_salary()
+        get_employees()
 
 
-if __name__ == '__main__':
-    main()
+main()
