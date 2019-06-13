@@ -42,7 +42,6 @@ iterator = LinkIterator(FILE, BASE_URL, FILE_TO_WRITE)
 iterator.write_to_file()
 
 
-
 def generate_hash(file_path):
     
     with open(FILE_TO_WRITE, 'rb') as f:
@@ -50,7 +49,8 @@ def generate_hash(file_path):
             line = line.strip()
             hash_line = hashlib.md5()
             hash_line.update(line)
-            print(hash_line.digest())
+            yield hash_line.digest()
 
 
-generate_hash(FILE_TO_WRITE)
+for item in generate_hash(FILE_TO_WRITE):
+    print(item)
