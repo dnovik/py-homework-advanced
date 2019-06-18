@@ -68,5 +68,7 @@ class Phonebook:
             if contact.contact_info['main']['Телефон'] == str(phone_num):
                 self.book.remove(contact)
 
-    def find_by_initials(self):
-        pass
+    def find_by_initials(self, initials):
+        for contact in self.book:
+            if contact.contact_info['main']['Имя'] == initials or contact.contact_info['main']['Фамилия'] == initials:
+                print(contact)
