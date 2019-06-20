@@ -5,10 +5,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 
-login = 'dnovik01@googlemail.com'
-password = '89265953872'
+login = 'login@gmail.com'
+password = 'qwerty'
 subject = 'Subject'
-recipients = ['nelden@yandex.ru', 'dnovik@grundfos.com']
+recipients = ['vasya@email.com', 'petya@email.com']
 message = 'Hello, world!'
 header = None
 
