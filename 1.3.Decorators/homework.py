@@ -38,36 +38,38 @@ raise_to_pow(11)
 
 # ЗАДАНИЕ 2
 
-def logger(func):
+def decorate(file=FILE_TO_WRITE):
 
-    def get_func_info(*args):
-        func_name = func.__name__
-        func_time = datetime.now()
-        func_args = args
-        func_result = func(args[0])
+    def logger(func):
 
-        with open(args[1], 'w', encoding='utf-8') as logger_file:
-            logger_file.write(f'Имя функции: {func_name}\n')
-            logger_file.write(f'Дата и время запуска функции: {func_time}\n')
-            logger_file.write(f'Аргументы функции: {func_args}\n')
-            logger_file.write(f'Результат функции: {func_result}\n')
+        def get_func_info(*args):
+            func_name = func.__name__
+            func_time = datetime.now()
+            func_args = args, file
+            func_result = func(args[0])
 
-    return get_func_info
+            with open(file, 'w', encoding='utf-8') as logger_file:
+                logger_file.write(f'Имя функции: {func_name}\n')
+                logger_file.write(f'Дата и время запуска функции: {func_time}\n')
+                logger_file.write(f'Аргументы функции: {func_args}\n')
+                logger_file.write(f'Результат функции: {func_result}\n')
+        return get_func_info
+    return logger
 
 
-@logger
+@decorate()
 def raise_to_pow(num):
     result = num ** 2
     return result
 
 # выполняем функцию для проверки декоратора
-raise_to_pow(11, FILE_TO_WRITE)
+raise_to_pow(34)
 
 
 # ЗАДАНИЕ 3
 # Функция взята из домашнего задания по теме: 3.2.http.requests
 
-@logger
+@decorate()
 def get_lang_id(language_name):
     # функция принимает название языка на русском и возвращает его параметр в виде id из Яндекс.Переводчик API
 
@@ -92,4 +94,4 @@ def get_lang_id(language_name):
 
 
 # выполняем функцию для проверки декоратора
-get_lang_id('Немецкий', FILE_TO_WRITE)
+get_lang_id('Немецкий')
