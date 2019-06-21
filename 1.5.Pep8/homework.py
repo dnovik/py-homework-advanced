@@ -69,7 +69,6 @@ if __name__ == '__main__':
 
             return email_message
 
-
 emailer = Emailer(login, password)
 emailer.send_message(recipients, subject, message)
 emailer.recieve_message(header)
