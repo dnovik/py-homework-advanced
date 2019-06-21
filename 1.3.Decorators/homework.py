@@ -18,7 +18,7 @@ def logger(func):
         func_args = args
         func_result = func(args[0])
 
-        with open(FILE_TO_WRITE, 'w', encoding='utf-8') as logger_file:
+        with open(FILE_TO_WRITE, 'a', encoding='utf-8') as logger_file:
             logger_file.write(f'Имя функции: {func_name}\n')
             logger_file.write(f'Дата и время запуска функции: {func_time}\n')
             logger_file.write(f'Аргументы функции: {func_args}\n')
