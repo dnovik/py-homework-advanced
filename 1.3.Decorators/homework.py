@@ -48,7 +48,7 @@ def decorate(file=FILE_TO_WRITE):
             func_args = args, file
             func_result = func(args[0])
 
-            with open(file, 'w', encoding='utf-8') as logger_file:
+            with open(file, 'a', encoding='utf-8') as logger_file:
                 logger_file.write(f'Имя функции: {func_name}\n')
                 logger_file.write(f'Дата и время запуска функции: {func_time}\n')
                 logger_file.write(f'Аргументы функции: {func_args}\n')
