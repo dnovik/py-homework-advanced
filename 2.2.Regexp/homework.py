@@ -45,7 +45,10 @@ for info in raw_data:
       for phone in phones:
             country_code = re.sub(r'\+7|8', '+7', phone[0])
             add = re.sub(r'\(?\доб\.\s?', 'доб.', phone[5])
-            phone_num = f'{country_code}({phone[1]}){phone[2]}-{phone[3]}-{phone[4]} {add} {phone[6]}'
+            if add:
+                  phone_num = f'{country_code}({phone[1]}){phone[2]}-{phone[3]}-{phone[4]} {add} {phone[6]}'
+            else:
+                  phone_num = f'{country_code}({phone[1]}){phone[2]}-{phone[3]}-{phone[4]}'
       
       # собираем эл.адреса
       if len(emails) == 1:
@@ -75,15 +78,26 @@ for info in raw_data:
                   book[lastname]['email'] = email
 
 # приведем результат к первоначальному виду
-result = []
+
+
+fields = list(list(book.values())[0].keys())
 info = []
 
-for values in book.values():
-      for key, value in values.items():
-            if key not in result:
-                  result.append(key)
-            info.append(value)
+for value in list(book.values()):
+      if fields not in info:
+            info.append(fields)
+      info.append(list(value.values()))
 
-result.append(info)
 
-result
+
+with open("phonebook.csv", "w", encoding='utf-8') as f:
+  datawriter = csv.writer(f)
+  # Вместо contacts_list подставьте свой список
+  datawriter.writerows(info)
+
+
+for value in list(book.values()):
+      for line in list(value.values()):
+            line = line.strip()
+      
+      print(list(value.values()))
