@@ -88,6 +88,9 @@ for value in list(book.values()):
             info.append(fields)
       info.append(list(value.values()))
 
+for line in info:
+      if '' in line:
+            line.remove('')
 
 
 with open("phonebook.csv", "w", encoding='utf-8') as f:
@@ -96,8 +99,3 @@ with open("phonebook.csv", "w", encoding='utf-8') as f:
   datawriter.writerows(info)
 
 
-for value in list(book.values()):
-      for line in list(value.values()):
-            line = line.strip()
-      
-      print(list(value.values()))
