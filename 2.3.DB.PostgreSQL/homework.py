@@ -16,12 +16,12 @@ students = [
 ]
 
 
-student = ("id serial PRIMARY KEY", "name varchar(100)",
+students = ("id serial PRIMARY KEY", "name varchar(100)",
     "gpa numeric(10,2)", "birth date")
 
-course = ("id serial PRIMARY KEY", "name varchar(100)")
+courses = ("id serial PRIMARY KEY", "name varchar(100)")
 
-student_course = ("id serial PRIMARY KEY", "student_id INTEGER REFERENCES student(id)", "course_id INTEGER REFERENCES  course_table(id)")
+student_course = ("id serial PRIMARY KEY", "student_id INTEGER REFERENCES students(id)", "course_id INTEGER REFERENCES courses(id)")
 
 
 class DataBase:
@@ -61,15 +61,16 @@ class DataBase:
     # просто создает студента
     def add_student(self, student): 
         
-        query = "INSERT INTO student(name, gpa, birth) VALUES(%(name)s, %(gpa)s, %(birth)s);"
+        query = "INSERT INTO students(name, gpa, birth) VALUES(%(name)s, %(gpa)s, %(birth)s);"
 
         self.cursor.execute(query, student)
 
     def get_student(self, student_id):
 
-        query = "SELECT * FROM student WHERE student.id = {}".format(student_id)
+        query = "SELECT * FROM students WHERE students.id = {}".format(student_id)
         self.cursor.execute(query)
         result = self.cursor.fetchone()
+        
         return result
         
 
@@ -77,6 +78,7 @@ class DataBase:
 
 if __name__ == "__main__":    
     database = DataBase(db_name, db_user, db_pass)
-    database.get_student('1')
+
+
 
 
