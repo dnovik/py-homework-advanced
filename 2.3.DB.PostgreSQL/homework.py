@@ -3,8 +3,8 @@ from psycopg2.extras import DictCursor
 from psycopg2 import sql
 
 db_name = 'test'
-db_user = 'Denis'
-db_pass = '4588917'
+db_user = 'user'
+db_pass = 'pass'
 
 student_1 = {'name' : 'Petr', 'gpa' : 4.5, 'birth' : '2001-01-13'}
 
