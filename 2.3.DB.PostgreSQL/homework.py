@@ -1,13 +1,13 @@
 import psycopg2
-from psycopg2.extras import DictCursor
-from psycopg2 import sql
 
 db_name = 'test'
 db_user = 'Denis'
 db_pass = '4588917'
 
+# Данные для создания одного студента
 student_1 = {'name' : 'Petr', 'gpa' : 4.5, 'birth' : '2001-01-13'}
 
+# Данные для создания нескольких студентов
 students = [
     {'name' : 'Igor', 'gpa' : 4.3, 'birth' : '2012-01-13'},
     {'name' : 'Oleg', 'gpa' : 4.2, 'birth' : '1901-01-13'},
@@ -15,13 +15,11 @@ students = [
     {'name' : 'Svetlana', 'gpa' : 5, 'birth' : '2031-01-13'}
 ]
 
-
-students = ("id serial PRIMARY KEY", "name varchar(100)",
+# Исходные данные для создания таблиц
+students_tab = ("id serial PRIMARY KEY", "name varchar(100)",
     "gpa numeric(10,2)", "birth date")
-
-courses = ("id serial PRIMARY KEY", "name varchar(100)")
-
-student_course = ("id serial PRIMARY KEY", "student_id INTEGER REFERENCES students(id)", "course_id INTEGER REFERENCES courses(id)")
+courses_tab = ("id serial PRIMARY KEY", "name varchar(100)")
+student_course_tab = ("id serial PRIMARY KEY", "student_id INTEGER REFERENCES students(id)", "course_id INTEGER REFERENCES courses(id)")
 
 
 class DataBase:
@@ -40,7 +38,6 @@ class DataBase:
         except:
             print("Can't connect to the database")
 
-        
 
     # создает таблицы
     def create_db(self, table_name, fields): 
@@ -52,11 +49,47 @@ class DataBase:
 
     # возвращает студентов определенного курса
     def get_students(self, course_id): 
-        pass
+
+        # получаем список id студентов
+        query = """SELECT students.id, students.name, courses.name FROM student_course 
+        JOIN students ON students.id = student_course.student_id
+        JOIN courses ON courses.id = student_course.course_id
+        WHERE student_course.course_id = %s;"""
+        self.cursor.execute(query, (course_id,))
+        result = self.cursor.fetchall()
+
+        print(result)
+
+        # делаем выборку студентов по списку id
+
 
     # создает студентов и записывает их на курс
     def add_students(self, course_id, students): 
-        pass
+        # 1 часть Добавляем данные в таблицу студенты
+        for student in students:
+            self.add_student(student)
+
+        # 2 часть Добавляем данные в таблицу курс-студент
+        # отбираем id по именам студентов
+        student_ids = self.get_id_by_name(students)
+
+        query = "INSERT INTO student_course(student_id, course_id) VALUES(%s, %s)"
+
+        for stud_id in student_ids:
+            self.cursor.execute(query, (stud_id, course_id))
+
+
+    # пришлось сделать функцию для add_students (см.выше)
+    def get_id_by_name(self, students):
+        query = "SELECT students.id FROM students WHERE students.name = %s;"
+        ids = []
+        for student in students:
+            name = student['name']
+            self.cursor.execute(query, (name,))
+            ids.append(self.cursor.fetchall()[0][0])
+
+        return ids
+
 
     # просто создает студента
     def add_student(self, student): 
@@ -65,20 +98,43 @@ class DataBase:
 
         self.cursor.execute(query, student)
 
+    # получает студента
     def get_student(self, student_id):
 
-        query = "SELECT * FROM students WHERE students.id = {}".format(student_id)
-        self.cursor.execute(query)
-        result = self.cursor.fetchone()
-        
+        query = "SELECT * FROM students WHERE students.id = %s"
+        self.cursor.execute(query, (student_id,))
+        result = self.cursor.fetchall()
+
         return result
         
+    # добавляет курс
+    def add_course(self, course_name):
+
+        query = "INSERT INTO courses(name) VALUES(%s);"
+        self.cursor.execute(query, (course_name,))
 
 
-
-if __name__ == "__main__":    
+if __name__ == "__main__":   
+    # иниицируем подключение к базе данных    
     database = DataBase(db_name, db_user, db_pass)
 
+    # создаем таблицы в базе
+    database.create_db('students', students_tab)
+    database.create_db('courses', courses_tab)
+    database.create_db('student_course', student_course_tab)
 
+    # создаем несколько курсов
+    database.add_course('Первый курс')
+    database.add_course('Второй курс')
 
+    # создаем одного студента
+    database.add_student(student_1)
 
+    # создаем много студентов и записываем их на курс
+    database.add_students(1, students)
+
+    # выберем одного студента 
+    database.get_student(1)
+
+    # выберем много студентов, записанных на указанный курс 
+    database.get_students(1)    
