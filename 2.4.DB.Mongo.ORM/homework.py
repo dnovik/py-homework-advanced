@@ -1,43 +1,49 @@
-from sqlalchemy import create_engine, Integer, Column, String, Date
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.dialects.postgresql import JSONB
-
-Base = declarative_base()
-engine = create_engine('postgresql+psycopg2://postgres:postgres@localhost/SQL_ORM')
-Session = sessionmaker(bind=engine)
+import csv
+import re
+from pymongo import MongoClient
+from datetime import datetime
 
 
-class Course(Base):
-    __tablename__ = 'course'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    start_at = Column(Date, nullable=False)
-    tags = Column(JSONB, server_default = '[]', default=list, nullable=False)
-
-    def __str__(self):
-        return f'{self.id} {self.name} {self.start_at} {self.tags}'
-
-    def __repr__(self):
-        return f'{self.id} {self.name} {self.start_at} {self.tags}'
+client = MongoClient()
+my_database = client['Concert_App']
+concert_collection = my_database['Concerts']
+csv_file = 'artists.csv'
 
 
-def create_all():
-    Base.metadata.create_all(engine)
+def read_data(csv_file, db):
 
-def add_course(**kwargs):
-    course = Course(**kwargs)
-    session.add(course)
-    session.commit()
+    # прочитать файл с данными и записать в коллекцию
+    concerts = list()
+
+    with open(csv_file, encoding='utf8') as csvfile:
+            
+            reader = list(csv.DictReader(csvfile))
+            for line in range(len(reader)):
+                
+                concerts.append({
+                        'Исполнитель' : reader[line]['Исполнитель'],
+                        'Цена' : int(reader[line]['Цена']),
+                        'Место' : reader[line]['Место'],
+                        'Дата' : datetime.strptime(reader[line]['Дата'] + '.' + '2019',  '%d.%m.%Y')
+                        }
+                )
+
+            concert_collection.insert_many(concerts)
 
 
-def find_course(tag_to_find='SMM'):
-    query = session.query(Course)
-    filtered_query = query.filter(Course.tags.has_key(tag_to_find))
+def find_cheapest(db):
+    
+    return list(db.find().sort([('Цена', 1 )]))
 
-    for course in filtered_query.all():
-        print(course)
 
-session = Session()
-find_course()
+
+def find_by_name(name, db):
+
+    regex = re.compile(f'{name}', re.I)
+    result = concert_collection.find({'Исполнитель' : regex})
+    return list(result.sort([('Цена', 1 )]))
+
+
+if __name__ == '__main__':
+    pass
+```
