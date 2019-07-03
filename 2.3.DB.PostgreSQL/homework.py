@@ -1,8 +1,10 @@
 import psycopg2
 
+
 db_name = 'yourdb_name'
 db_user = 'yourusername'
 db_pass = 'yourpass'
+
 
 # Данные для создания одного студента
 student_1 = {'name' : 'Petr', 'gpa' : 4.5, 'birth' : '2001-01-13'}
